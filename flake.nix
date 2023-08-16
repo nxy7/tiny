@@ -27,6 +27,10 @@
                 pkgs.lib.makeLibraryPath
                 (with pkgs; [ stdenv.cc.cc openssl openssl_1_1 glibc ])
               }:$LD_LIBRARY_PATH"
+
+              "NIX_LD=${
+                builtins.readFile "${pkgs.stdenv.cc}/nix-support/dynamic-linker"
+              }"
             ];
           };
           copyToRoot = pkgs.buildEnv {
