@@ -37,7 +37,7 @@
               toybox
               glibc
               # musl
-              # nix-ld
+              nix-ld
               # (runCommand "profile" { } ''
               #   export LD_LIBRARY_PATH="${
 
@@ -46,7 +46,7 @@
               # openssl
               # openssl_1_1
             ];
-            pathsToLink = [ "/bin" ];
+            pathsToLink = [ "/bin" "/lib64" "/lib" ];
           };
           # config = { entrypoint = [ "${pkgs.hello}/bin/hello" ]; };
         };
