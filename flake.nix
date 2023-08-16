@@ -15,19 +15,36 @@
           config.permittedInsecurePackages = [ "openssl-1.1.1u" ];
         };
         nix2containerPkgs = nix2container.packages.${system};
+        # opensslfix = 
       in {
         devShells.default = pkgs.mkShell { packages = with pkgs; [ nushell ]; };
         packages.tiny = nix2containerPkgs.nix2container.buildImage {
           name = "tiny";
           tag = "latest";
+          config = {
+            env = [
+              "LD_LIBRARY_PATH=${
+                pkgs.lib.makeLibraryPath
+                (with pkgs; [ stdenv.cc.cc openssl openssl_1_1 glibc ])
+              }:$LD_LIBRARY_PATH"
+            ];
+          };
           copyToRoot = pkgs.buildEnv {
             name = "root";
             paths = with pkgs; [
               bashInteractive
-              coreutils
+              # coreutils
+              toybox
               glibc
+              # musl
+              # nix-ld
+              # (runCommand "profile" { } ''
+              #   export LD_LIBRARY_PATH="${
+
+              #   }:$LD_LIBRARY_PATH"
+              # '')
               # openssl
-              openssl_1_1
+              # openssl_1_1
             ];
             pathsToLink = [ "/bin" ];
           };
