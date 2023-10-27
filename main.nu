@@ -8,3 +8,8 @@ export def `main build-and-push` [] {
   docker tag tiny:latest nxyt/tiny:latest
   docker push nxyt/tiny:latest
 }
+
+# Build the image and push it to docker hub registry
+export def `main build` [] {
+  nix run .#tiny.copyToDockerDaemon --impure
+}
